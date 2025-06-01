@@ -51,15 +51,3 @@ Feel free to connect if you want to collaborate or ask questions:
     📧 Email: Shrivahire@gmail.com
 
 ⚙️ Built with 💙 by Shrikant Ahire, a curious mind on the path to mastering agentic AI.
----
-
-## ✅ Next Steps
-
-1. **Paste this into `README.md`** in VS Code  
-2. Save the file (`Ctrl + S`)
-3. In terminal:
-
-```bash
-git add README.md
-git commit -m "Add personalized README"
-git push
