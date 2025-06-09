@@ -1,0 +1,14 @@
+from llama_index.core import SimpleDirectoryReader  # load data
+from llama_index.core.node_parser import SimpleNodeParser  # semantic splitter for node parsing
+from llama_index.core import VectorStoreIndex  # for creating an index
+
+documents = SimpleDirectoryReader(input_dir="./data").load_data()  # load documents from the specified directory
+
+parser = SimpleNodeParser()
+nodes = parser.get_nodes_from_documents(documents)  # parse the documents into nodes
+
+index = VectorStoreIndex(nodes)  # create an index from the nodes
+
+query_engine = index.as_query_engine()  # create a query engine from the index
+response1 = query_engine.query("What are the names of resume candidates?")  # ask a question
+print("\n📄 Answer 1:\n", response1)  # print the response
