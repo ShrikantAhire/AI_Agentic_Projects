@@ -1,0 +1,41 @@
+from llama_index.core import SimpleDirectoryReader
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.llms.google_genai import GoogleGenAI
+from llama_index.core.node_parser import SemanticSplitterNodeParser
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+import os
+from dotenv import load_dotenv
+from llama_index.core import Settings
+
+# Load environment variables
+load_dotenv()
+
+# Initialize the Google GenAI LLM
+llm = GoogleGenAI(
+    model=os.getenv("GEMINI_MODEL"),
+    api_key=os.getenv("GOOGLE_API_KEY")
+)
+
+# Load the documents from the specified directory
+reader = SimpleDirectoryReader(input_dir="./data")
+documents = reader.load_data()
+
+# Initialize the embedding model
+Settings.embed_model = HuggingFaceEmbedding(
+    model_name="all-MiniLM-L6-v2"
+)
+# Create a semantic splitter
+semantic_splitter = SemanticSplitterNodeParser(
+    buffer_size=1, breakpoint_percentile_threshold=95,
+    embed_model=Settings.embed_model,
+    chunk_size=512,
+    chunk_overlap=50
+)
+nodes=semantic_splitter.get_nodes_from_documents(documents)
+
+# Show node details
+for i, node in enumerate(nodes[:3]):
+    print(f"Node {i+1}:")
+    print(f"Text: {node.text[:300]}...")  # Print first 300 characters
+    print(f"Metadata: {node.metadata}")
+    #print("-" * 40)
